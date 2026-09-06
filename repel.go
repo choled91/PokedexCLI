@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func startRepel() {
+func startRepel(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
@@ -28,7 +28,7 @@ func startRepel() {
 			continue
 		}
 
-		command.callback()
+		command.callback(cfg)
 
 	}
 }
@@ -36,7 +36,7 @@ func startRepel() {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -50,6 +50,16 @@ func getCommands() map[string]cliCommand {
 			name:        "exit",
 			description: "Exit the Pokedex",
 			callback:    callbackExit,
+		},
+		"map": {
+			name:        "map",
+			description: "Displays the name of the next location areas",
+			callback:    callbackMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Displays the name of the previous location areas",
+			callback:    callbackMapB,
 		},
 	}
 }
