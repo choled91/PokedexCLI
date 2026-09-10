@@ -20,6 +20,10 @@ func startRepel(cfg *config) {
 			continue
 		}
 		commandName := cleanedWords[0]
+		args := []string{}
+		if len(cleanedWords) > 1 {
+			args = cleanedWords[1:]
+		}
 		availableCommands := getCommands()
 		command, ok := availableCommands[commandName]
 		if !ok {
@@ -28,7 +32,7 @@ func startRepel(cfg *config) {
 			continue
 		}
 
-		command.callback(cfg)
+		command.callback(cfg, args...)
 
 	}
 }
@@ -36,7 +40,7 @@ func startRepel(cfg *config) {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -60,6 +64,11 @@ func getCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Displays the name of the previous location areas",
 			callback:    callbackMapB,
+		},
+		"explore": {
+			name:        "explore {location_area_name}",
+			description: "Displays the name of the pokemon in a location area",
+			callback:    callbackExplore,
 		},
 	}
 }
